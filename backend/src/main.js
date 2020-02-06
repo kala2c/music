@@ -34,6 +34,7 @@ app.use((request, response) => {
   })
 })
 
-app.listen(3000, () => {
-  console.log("Server running at port 3000")
+const port = 7000
+app.listen(port, () => {
+  console.log("Server running at port "+port)
 })
