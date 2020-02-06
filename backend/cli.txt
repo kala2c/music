@@ -1,0 +1,1 @@
+npx sequelize model:generate --name music --attributes name:string,singer:string,url:string,status:number,groups_id:number 
