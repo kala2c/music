@@ -3,7 +3,9 @@
     <router-view/>
     <control-bar v-show="CtrlBarShow" @openCard="openCard" @togglePlayList="togglePlayList"></control-bar>
     <player></player>
-    <play-list v-show="playListShow" @close="closePlayList"></play-list>
+    <transition name="slide-fade">
+      <play-list v-show="playListShow" @close="closePlayList"></play-list>
+    </transition>
   </div>
 </template>
 
@@ -124,5 +126,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.slide-fade-enter-active {
+  transition: all .6s ease;
+}
+.slide-fade-leave-active {
+  transition: all .6s ease;
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateY(100%);
 }
 </style>

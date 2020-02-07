@@ -1,6 +1,6 @@
 <template>
   <div class="play-list">
-    <head-bar :title="'播放队列'" :left="''" :right="'times'" @right="$emit('close')"></head-bar>
+    <head-bar class="head-bar" :title="'播放队列'" :left="''" :right="'times'" @right="$emit('close')"></head-bar>
     <div class="list-header" @click="switchHandle">
       <img :src="`/play-icon/${playType}.png`" alt="">
       <h2 class="switch">
@@ -73,16 +73,27 @@ export default {
 .play-list {
   position: absolute;
   top: 10%;
+  z-index: 50;
   box-sizing: border-box;
   width: 100%;
   height: 90%;
-  padding-bottom: 50px;
-  overflow: auto;
+  padding-top: 100px;
+  padding-bottom: 65px;
+  overflow: hidden;
   border: 1px solid #eee;
   background-color: #fff;
+  .head-bar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  } 
   .list-header {
+    position: absolute;
+    top: 50px;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
+    width: 100%;
     padding: 10px 20px;
     border-bottom: 1px solid #eee;
     opacity: 1;
@@ -98,6 +109,8 @@ export default {
     }
   }
   .list-group {
+    height: 100%;
+    overflow: auto;
     .blank-text {
       padding: 30px 0;
       color: #666;

@@ -46,6 +46,8 @@ h1 {
   flex: 1;
 }
 span {
-  padding: 0 20px;
+  width: 30px;
+  padding: 0 10px;
+  text-align: center;
 }
 </style>

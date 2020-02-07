@@ -47,7 +47,9 @@ import api from '../api/api'
           singer: '',
           groups_id: ''
         },
-        uploadData: {},
+        uploadData: {
+          
+        },
         groups: [],
 
       };
@@ -55,7 +57,8 @@ import api from '../api/api'
     watch: {
       form(value) {
         console.log(value)
-      }
+      },
+      uploadData: {}
     },
     methods: {
       submitUpload() {

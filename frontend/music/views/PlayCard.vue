@@ -87,8 +87,11 @@ export default {
       this.switchPlayType()
     },
     close() {
-      this.$store.state.CtrlBarShow = true
-      this.$router.go(-1)
+      this.$el.style.top = '90%'
+      setTimeout(() => {
+        this.$store.state.CtrlBarShow = true
+        this.$router.go(-1)
+      }, 400)
     },
     toPlayList() {
       this.$parent.openPlayList()
@@ -110,12 +113,18 @@ export default {
     // let progress = document
     let progress = document.querySelector('#card-progress')
     this.progressWidth = parseInt(getComputedStyle(progress, null)['width'])
+    this.$el.style.top = 0
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .play-card {
+  position: absolute;
+  top: 60%;
+  width: 100%;
+  height: 100%;
+  transition: top .6s ease;
   .singer {
     text-align: center;
     margin-top: 30px;
