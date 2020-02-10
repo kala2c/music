@@ -5,9 +5,8 @@ const bodyParser = require('body-parser')
 const qiniu = require('qiniu')
 // 创建 application/x-www-form-urlencoded 编码解析
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
-
 adminRouter
-  .post('/admin/login', urlencodedParser, async (req, res) => {
+  .post('/admin/login', async (req, res) => {
     let params = req.body
     if (params.username == 'admin' && params.password == '123456') {
       res.json({
@@ -35,19 +34,39 @@ adminRouter
     })
     res.json(groups)
   })
-  .post('/admin/music/create', urlencodedParser, async (req, res) => {
+  .post('/admin/music/create', async (req, res) => {
+    console.log(req.body)
     let params = req.body
     params.status = 0
+    console.log(params)
     // let split1 = params.name.split('-')
     // params.url = 'http://qn.clw-music.c2wei.cn/'+params.name
     // params.singer = split1[0].trim()
     // params.name = split1[1].split('.')[0].trim()
     let music = await model.music.create(params)
-    res.json(music)
+    if (music) {
+      res.json({
+        'msg': '操作成功'
+      })
+    } else {
+      res.status(500)
+      res.json({
+        'err': '服务器错误'
+      })
+    }
   })
-  .post('/admin/groups/create', urlencodedParser, async (req, res) => {
+  .post('/admin/groups/create', async (req, res) => {
     let groups = await model.groups.create(req.body)
-    res.json(groups)
+    if (groups) {
+      res.json({
+        'msg': '创建成功'
+      })
+    } else {
+      res.status(500)
+      res.json({
+        'err': '服务器错误'
+      })
+    }
   })
   .get('/admin/upload/token', async (req, res) => {
     let accessKey = '7uWaOUyNHHxN5cpQbsZs1M6yYraxkrfxr_jBQg0Q'

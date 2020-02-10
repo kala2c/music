@@ -4,6 +4,11 @@ const path = require('path');
 const bodyParser = require('body-parser')
 // const cookieParser = require('cookie-parser');
 
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
+app.use(express.static('public'))
+
+// 设置跨域请求
 const crosFilter = function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin","*");
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -12,25 +17,18 @@ const crosFilter = function (req, res, next) {
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next()
 }
-
 app.use(crosFilter)
+
 const apiRouter = require('./router/api.js')
 const adminRouter = require('./router/admin.js')
 
 app.use(apiRouter)
 app.use(adminRouter)
 
-app.use(express.json());
-// app.use(express.urlencoded());
-// app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(express.static('public'))
-
-
-
 app.use((request, response) => {
+  response.status(404)
   response.json({
-    error: "404"
+    errMsg: "请求信息不存在"
   })
 })
 

@@ -6,9 +6,9 @@ let domain = '/'
 
 const getMusicList = query => { return request(query, domain + 'admin/music/list') }
 const getGroupsList = query => { return request(query, domain + 'admin/groups/list') }
-const createMusic = query => { return request(query, domain + 'admin/music/create') }
-const createGroups = query => { return request(query, domain + 'admin/groups/create') }
-const login = query => { return request(query, domain + 'admin/login') }
+const createMusic = query => { return request(query, domain + 'admin/music/create', 'POST') }
+const createGroups = query => { return request(query, domain + 'admin/groups/create', 'POST') }
+const login = query => { return request(query, domain + 'admin/login', 'POST') }
 const getUploadToken = query => { return request(query, domain + 'admin/upload/token') }
 
 

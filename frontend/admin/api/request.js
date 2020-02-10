@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const request = async (q, url) => {
+import { MessageBox } from 'element-ui'
+
+const request = async (q, url, method) => {
   let response
 
   let query = q || {}
@@ -9,12 +11,15 @@ const request = async (q, url) => {
   // let data = query.method || {}
   await axios({
     url,
-    method: query.method || 'get',
+    method: method || 'get',
+    // headers: {"Content-type": "application/x-www-form-urlencode"},
     data: query.data || {}
   }).then(res => {
     response = res
   }).catch(err => {
-    response = err
+    if (err.response) {
+      MessageBox.alert(err.response.data.err)
+    }
   })
   return response
 }

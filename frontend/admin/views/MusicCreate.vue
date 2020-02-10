@@ -17,18 +17,17 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="">
-        <el-input type="hidden" v-model="form.url"></el-input>
-      </el-form-item>
     </el-form>
     <el-upload
       class="upload-demo"
       ref="upload"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      action="http://up-z0.qiniup.com"
       :data="uploadData"
-      :before-upload="handleUpload"
+      :on-change="handleChange"
       :on-success="handleSuccess"
       :file-list="fileList"
+      :limit="1"
+      :multiple="false"
       :auto-upload="false">
       <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
       <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">提交</el-button>
@@ -45,45 +44,89 @@ import api from '../api/api'
         form: {
           name: '',
           singer: '',
-          groups_id: ''
+          groups_id: '',
+          url: '1'
         },
         uploadData: {
-          
+          token: ''
         },
         groups: [],
 
       };
     },
     watch: {
-      form(value) {
-        console.log(value)
+      form: {
+        handler(newVal, oldVal) {
+          if (newVal.name.indexOf('mqms') > 1) {
+            this.form.name = newVal.name.split('[')[0].trim()
+          }
+        },
+        deep: true
       },
-      uploadData: {}
+      uploadData(value) {
+        console.log(value)
+      }
     },
     methods: {
       submitUpload() {
-        this.$refs.upload.submit();
+        let canSubmit = true
+        if (!this.form.name) {
+          console.log(this.form.name)
+          canSubmit = false
+        }
+        if (!this.form.singer) {
+          console.log(this.form.singer)
+          canSubmit = false
+        }
+        if (!this.form.groups_id) {
+          console.log(this.form.groups_id)
+          canSubmit = false
+        }
+        if (canSubmit) {
+          this.$refs.upload.submit();
+        } else {
+          this.$alert('请将歌曲信息填写完整')
+        }
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
+      handleChange(file, fileList) {
+        if (file.name.split('.').length === 2) {
+          let [filename, filetype] = file.name.split('.')
+          if (filename.split('-').length === 2) {
+            let [singer, songname] = filename.split('-')
+            this.$set(this.form, 'singer', singer.trim())
+            // this.form.singer = singer.trim()
+            this.form.name = songname.trim()
+          }
+        } else if (file.name.split('-').length === 2) {
+          let [singer, songname] = file.name.split('-')
+          this.form.singer = singer
+          this.form.name = songname.trim()
+        }
       },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleUpload(file) {
-        // 
-      },
-      handleSuccess(response, file, fileList) {
+      async handleSuccess(response, file, fileList) {
         console.log(response)
+        this.form.url = 'http://qn.clw-music.c2wei.cn/'+response.key
+        let res = await api.createMusic({
+          method: 'post',
+          data: this.form
+        })
+        if (res) {
+          this.$message(res.data.msg)
+          this.fileList = []
+          this.form.name = ''
+          this.form.url = ''
+          this.getToken()
+        }
+      },
+      async getToken() {
+        let res = await api.getUploadToken()
+        this.uploadData.token = res.data.token
       }
     },
     async mounted() {
       let groups = await api.getGroupsList()
       this.groups = groups.data
-
-      let res = await api.getUploadToken()
-      console.log(res)
-      this.form.uploadToken = res.data.token
+      this.getToken()
     }
   }
 </script>
