@@ -3,6 +3,8 @@ const adminRouter = express.Router()
 const model = require('../models')
 const bodyParser = require('body-parser')
 const qiniu = require('qiniu')
+const config = require('../config/config.js')
+console.log(config)
 // 创建 application/x-www-form-urlencoded 编码解析
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 adminRouter
@@ -69,8 +71,8 @@ adminRouter
     }
   })
   .get('/admin/upload/token', async (req, res) => {
-    let accessKey = '7uWaOUyNHHxN5cpQbsZs1M6yYraxkrfxr_jBQg0Q'
-    let secretKey = 'UY2ZdWMxvqLjq30JgjnglVVIs4o772zzl8I0SeTD'
+    let accessKey = config.accessKey
+    let secretKey = config.secretKey
     let bucket = 'clw-music'
     let mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
     let options = {
