@@ -1,36 +1,34 @@
 import Vue from 'vue'
+import Layout from '../layout/index'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-
-import MusicManage from '../views/MusicManage'
-import MusicCreate from '../views/MusicCreate'
-import GroupsManage from '../views/GroupsManage'
-import GroupsCreate from '../views/GroupsCreate'
+// import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    component: Layout,
+    children: [
+      {
+        path: '/music/manage',
+        component: () => import('../views/music/Manage')
+      },
+      {
+        path: '/music/create',
+        component: () => import('../views/music/Create')
+      },
+      {
+        path: '/groups/manage',
+        component: () => import('../views/groups/Manage')
+      },
+      {
+        path: '/groups/create',
+        component: () => import('../views/groups/Create')
+      }
+    ]
   },
-  {
-    path: '/music/manage',
-    component: MusicManage
-  },
-  {
-    path: '/music/create',
-    component: MusicCreate
-  },
-  {
-    path: '/groups/manage',
-    component: GroupsManage
-  },
-  {
-    path: '/groups/create',
-    component: GroupsCreate
-  }
+
 ]
 
 const router = new VueRouter({
